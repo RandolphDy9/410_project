@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <iomanip>
 
 using namespace std;
 
@@ -64,8 +65,7 @@ int main() {
 	size = name.length();	
 	
 	int store;
-	int storeAscii[50];
-	int storeBits[500];
+	int storeAscii[500];
 	int x;
 	const char *chars = name.c_str();
 	
@@ -79,8 +79,7 @@ int main() {
 			sum = sum + (ib*rem);
 			store = store / 2;
 			ib = ib * 10;
-			
-		} while (store>0);		
+		} while (store>0);	
 		
 		storeAscii[x] = sum;
 	}
@@ -88,7 +87,7 @@ int main() {
 	// printing the binary equivalent
 	cout << endl << "Binary equivalent: " << endl;
 	for (x=0; x<size; x++) {
-		cout << storeAscii[x] << " ";	
+		cout << setfill('0') << setw(8) << storeAscii[x] << " ";
 	}
 	
 	// code and printing hexadecimal value
@@ -123,6 +122,7 @@ int main() {
 
 	// Little Endian kay ang LSB. aw dba nu? hahaha 
 	cout << endl << "\nPassed to Graph in LITTLE ENDIAN:" << endl;
+	int count = 0;
 	for (x=size-1; x>=0; x--) {
 		store = (int)chars[x];
 
@@ -134,8 +134,19 @@ int main() {
 			ib = ib * 10;
 
 			readBits(rem);	// for printing
+			count++;
 
 		} while (store>0);	
+		
+		if (count == 6) {
+			cout << 0;
+			cout << 0;
+		} else if (count == 7) {
+			cout << 0;
+		}
+		
+		cout << " ";
+		count = 0;
 	}
 	
 	cout << endl << endl << "(*NOTE: The Graph bitrate used is 2 bits per nanosecond.)";
@@ -171,12 +182,13 @@ int main() {
 	cout << endl << endl << "Graph Output of NRZL: " << endl;
 	
 	// For reading bits in NRZL
+	int count2 = 0;
 	for (x=size-1; x>=0; x--) {
 		store = (int)chars[x];	
 
 		long rem=0, ib=1, sum=0;
 		do {
-			
+			count2++;
 			rem = store%2;
 			sum = sum + (ib*rem);
 			store = store / 2;
@@ -185,6 +197,16 @@ int main() {
 			readNRZL(rem);	// for printing
 			
 		} while (store>0);	
+		
+		if (count2 == 6) {
+			cout << 1;
+			cout << 1;
+		} else if (count2 == 7) {
+			cout << 1;
+		}
+		
+		cout << " ";
+		count2 = 0;
 	}	
 
 	int r = 0;	
@@ -242,12 +264,13 @@ int main() {
 	cout << endl << "Graph Output of Manchester Encoding:" << endl;	
 	
 	// For reading bits in Manchester
+	int count3 = 0;
 	for (x=size-1; x>=0; x--) {
 		store = (int)chars[x];	
 
 		long rem=0, ib=1, sum=0;
 		do {
-			
+			count3++;
 			rem = store%2;
 			sum = sum + (ib*rem);
 			store = store / 2;
@@ -256,6 +279,15 @@ int main() {
 			readMan(rem);	// for printing
 			
 		} while (store>0);	
+		
+		if (count3 == 6) {
+			cout << 1; cout << 0; cout << " ";
+			cout << 1; cout << 0;
+		} else if (count3 == 7) {
+			cout << 1; cout << 0;
+		}
+		cout << endl;
+		count3 = 0;
 	}		
 	
 	int m = 0;	
